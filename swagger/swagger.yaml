@@ -1,0 +1,72 @@
+---
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: "Pantheon's API-ish"
+produces:
+- "application/json"
+paths:
+  /not-implemented:
+    get:
+      tags:
+      - "default_controller"
+      summary: "not implemented yet"
+      operationId: "controllers.default_controller.not_implemented_get"
+      parameters: []
+      responses:
+        200:
+          description: "An array of nothingness"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/relation"
+definitions:
+  relation:
+    type: "object"
+    properties:
+      cardinality:
+        type: "string"
+        description: "A relationship’s cardinality defines the maximum number of entities\
+          \ of one type that can be associated with an entity of another type. (I.E.\
+          \ 1:M -> A user has many sites)"
+        enum:
+        - "1:1"
+        - "1:M"
+        - "M:M"
+        - "M:M:M"
+        - "0"
+      existence:
+        type: "string"
+        description: "Allow an entity to be created with/without classifying its subtypes.\
+          \ (I.E. 'mandatory' setting -> (site, environment, binding)), (I.E. 'optional'\
+          \ feature -> (site, user, organization))"
+        enum:
+        - "optional"
+        - "mandatory"
+      degree:
+        type: "string"
+        description: "Relationships can be classified by the number of entity types\
+          \ involved."
+        enum:
+        - "binary"
+        - "ternary"
+        - "recursive"
+      sub_type:
+        type: "string"
+        description: "If entities are allowed to be no more than one subtype, then\
+          \ the subtypes are said to be disjoint (I.E. bindings -> (appserver, dbserver,\
+          \ etc)). If entities can be classified as several subtypes, then the subtypes\
+          \ are said to be overlapping (I.E user -> (holder, owner, user_in_charge,\
+          \ etc.))."
+        enum:
+        - "disjoint"
+        - "overlapping"
+      aggregate:
+        type: "boolean"
+        description: "When an entity is made up of several different types of other\
+          \ entities (I.E. sites -> (settings, features, etc.) )."
+      weak:
+        type: "boolean"
+        description: "A weak relation exists because some other relation to an entity\
+          \ exists. (I.E. sites -> (bindings, loadbalancers, etc.))"
+    description: "Metadata describing a relation."
